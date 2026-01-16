@@ -3,34 +3,20 @@
 #include <iostream>
 using namespace std;
 
-TarjetaCredito::TarjetaCredito(string num,string tit, double ingresoMensual){
-cout << "Ingrese el numero de la tarjeta: " << endl;
-cin >> num;
-cout << "Ingrese el titular de la tarjeta: " << endl;
-cin >> tit;
+TarjetaCredito::TarjetaCredito(string  num,string tit, double ingresoMensual){
+numero = num;
+titular = tit;
 
-cout << "Ingrese el ingreso mensual: " << endl;
-cin >> ingresoMensual;
-double cupoMaximo = ingresoMensual * 0.35;
-double cupoRedondeado = ceil(cupoMaximo/50) * 50;
-if(cupoRedondeado<300){
-    cupoRedondeado = 300;
+double cupoCalculado = ingresoMensual * 0.35;
+cupoMaximo = ceil(cupoCalculado/50) * 50;
+
+if(cupoMaximo < 300){
+cupoMaximo = 300;
 }
 
-double saldoActual = 0;
-cout << "Su estado inicial es: " << endl;
-cout << "Activa" << endl;
-cout << "Tarjeta creada para el titular: "<<tit<<endl;
+saldoActual = 0;
+estado = "Activa";
 
-}
-
-int main(){
-    int num;
-    string tit;
-    double ingresoMensual;
-    TarjetaCredito(num, tit, ingresoMensual);
-
-
-    return 0;
+cout << "Tarjeta de credito creada para el titular: " << titular << endl;
 }
 
