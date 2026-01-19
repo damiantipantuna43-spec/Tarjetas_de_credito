@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 #include "tarjetas.h"
-
+#include "clientes.h"
+#include "sistema.h"
 
 
 class Cliente{
@@ -18,5 +19,7 @@ public:
     void agregarTarjeta(TarjetaCredito* tarjetas);
     void mostrarInfo() const;
     double getIngresos() const;
+    string getId() const;
+    string getNombre() const;
 };
 #endif

@@ -3,10 +3,11 @@
 #include <string>
 #include <vector>
 #include "tarjetas.h"
+#include "sistema.h"
 using namespace std;
 
 Cliente::Cliente(string idCliente, string nombreCliente,double ingresosCliente){
- id = idCliente;
+id = idCliente;
 nombre = nombreCliente;
 ingresosMensuales = ingresosCliente;
 }
@@ -14,6 +15,7 @@ ingresosMensuales = ingresosCliente;
 void Cliente::agregarTarjeta(TarjetaCredito* misTarjetas){
 tarjetas.push_back(misTarjetas);
 }
+
 
 
 void Cliente::mostrarInfo() const {
@@ -35,5 +37,10 @@ void Cliente::mostrarInfo() const {
 double Cliente::getIngresos() const {
     return ingresosMensuales;
 }
-
+string Cliente::getId() const{
+    return id;
+}
+string Cliente::getNombre() const{
+    return nombre;
+}
 

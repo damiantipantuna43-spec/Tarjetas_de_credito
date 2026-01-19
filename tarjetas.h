@@ -1,6 +1,8 @@
 #ifndef TARJETAS_H
 #define TARJETAS_H
 #include <string>
+#include "clientes.h"
+#include "sistema.h"
 
 // Plan con uso de clases son el fin de modular mejor el codigo y encapsular datos, de este modo la libreria es mucho mas limpia
 //ordenada y facil de mantener.
