@@ -44,3 +44,6 @@ string Cliente::getNombre() const{
     return nombre;
 }
 
+vector<TarjetaCredito*>& Cliente::getTarjetas() {
+    return tarjetas;
+}

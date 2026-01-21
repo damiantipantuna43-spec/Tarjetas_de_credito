@@ -26,15 +26,17 @@ switch (opcion){
     case 2:
     crearTarjeta();
     break;
-
+   
     case 3:
-
+    realizarCompra();
     break;
 
     case 4:
+    
     break;
 
     case 5:
+    
     break;
 
     case 6:
@@ -90,4 +92,62 @@ void Sistema::crearTarjeta(){
         cliente->agregarTarjeta(nuevaTarjeta);
         cout <<"Tarjeta de Credito creada exitosamente: "<<endl;
     }
+}
+
+
+void Sistema::realizarCompra(){
+if(clientes.empty()){
+cout<<"No hay clientes registrados. "<<endl;
+return;
+}
+
+for(int i=0;i<clientes.size();i++){
+cout << i+1 << ". " << clientes[i]->getNombre() << endl;
+}
+
+int opcion;
+cout << "Ingrese el digito que corresponde al cliente: " << endl;
+cin >> opcion;
+  if (opcion < 1 || opcion > clientes.size()) {
+    cout << "Opción inválida" << endl;
+    return;
+}
+ Cliente* cliente = clientes[opcion-1]; 
+if(cliente->getTarjetas().empty()){
+cout <<"El cliente no tiene tarjetas registradas. "<<endl;
+return;
+}
+
+cout << "Tarjetas del usuario: "<< cliente->getNombre()<< endl;
+for(int i=0;i<cliente->getTarjetas().size();i++){
+cout << i+1 << ". " << cliente->getTarjetas()[i]->getNumero() << endl;
+}
+
+int opcionTarjeta;
+cout<<"Ingrese el digito de la tarjeta: "<<endl;
+cin>>opcionTarjeta;
+
+ if (opcionTarjeta < 1 || opcionTarjeta > cliente->getTarjetas().size()) {
+    cout << "Opción inválida" << endl;
+    return;
+}
+
+TarjetaCredito* tarjeta = cliente->getTarjetas()[opcionTarjeta-1];
+
+double monto;
+string categoria;
+
+cout<< "Ingrese el Monto de la compra $: "<<endl;
+cin>>monto;
+cout<<"ingrese la categoria de las siguientes opciones: "<<endl;
+cout<<"ENTRETENIMIENTO/COMIDA/SALUD/EDUCACION"<<endl,
+cin >>categoria;
+bool exito = tarjeta->comprar(monto, categoria);
+
+if(true){
+cout<<"Compra Realizada con exito: "<<endl;
+}else{
+cout<<"La compra no se pudo realizar: "<<endl;
+}
+
 }

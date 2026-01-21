@@ -15,5 +15,6 @@ public:
     void ejecutar();
     void crearCliente();
     void crearTarjeta();
+    void realizarCompra();
 };
 #endif
