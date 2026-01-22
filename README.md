@@ -11,7 +11,7 @@
 10. Historial crediticio y Cupo Máximo y mínimo. (listo)
 Extra
 1. para compilar y ejecutar (esto se va actualizando con forme a las librerias)
-g++ main.cpp tarjetas.cpp clientes.cpp -o sistema.exe && ./sistema.exe
+g++ main.cpp tarjetas.cpp clientes.cpp sistema.cpp -o sistema.exe && ./sistema.exe
 2. para subir lo cambios a githup
 git add .
 git commit -m "Descripción cambios"

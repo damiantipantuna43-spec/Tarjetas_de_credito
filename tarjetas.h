@@ -34,6 +34,7 @@ void mostrarInformacion() const;
 // ver como varian los datos
 double getSaldo() const;
 double getCupoDisponible() const;
+double getCupoMaximo() const;
 std::string getNumero() const;
 std::string getEstado() const;
 

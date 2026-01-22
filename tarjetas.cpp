@@ -92,4 +92,26 @@ void TarjetaCredito::mostrarInformacion() const {
     cout << "Estado: " << estado << endl;
     cout << "Pago Minimo Requerido $: " << calcularPagoMinimo() << endl;
 }
-   
+
+void TarjetaCredito::pagar(double monto) {
+    if (estado != "ACTIVA") {
+        cout << "Tarjeta no activa" << endl;
+        return;
+    }
+    if (monto <= 0) {
+        cout << "Monto inválido" << endl;
+        return;
+    }
+    if (monto > saldoActual) {
+        cout << "Monto excede saldo. Saldo actual: $" << saldoActual << endl;
+        return;
+    }
+
+    saldoActual -= monto;
+    cout << "Pago realizado: $" << monto << endl;
+    cout << "Nuevo saldo: $" << saldoActual << endl;
+}
+
+double TarjetaCredito::getCupoMaximo() const{
+    return cupoMaximo;
+}

@@ -21,5 +21,6 @@ public:
     double getIngresos() const;
     string getId() const;
     string getNombre() const;
+    vector<TarjetaCredito*>& getTarjetas();
 };
 #endif

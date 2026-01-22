@@ -1,6 +1,7 @@
 #include "sistema.h"
 #include "tarjetas.h"
 #include "clientes.h"
+#include "archivos.h"
 #include <iostream>
 #include <vector>
 
@@ -8,8 +9,8 @@ using namespace std;
 
 void Sistema::ejecutar(){
 int opcion;
-cout << "\t===BIENVENIDO AL SISTEMA DE TARJETAS DE CREDITO===\t"<<endl;
 do{
+    cout << "\t===BIENVENIDO AL SISTEMA DE TARJETAS DE CREDITO===\t"<<endl;
     cout <<"1. Registrarse como cliente "<<endl;
     cout <<"2. Crear Tarjeta "<<endl;
     cout <<"3. Realizar Compra "<<endl;
@@ -26,15 +27,17 @@ switch (opcion){
     case 2:
     crearTarjeta();
     break;
-
+   
     case 3:
-
+    realizarCompra();
     break;
 
     case 4:
+    realizarPago();
     break;
 
     case 5:
+    mostrarInformacionCliente();
     break;
 
     case 6:
@@ -42,6 +45,7 @@ switch (opcion){
     break;
     default:
     cout <<"Opcion Invalida"<<endl;
+    break;
 }
 }while(opcion !=6);
 }
@@ -65,8 +69,9 @@ Cliente* nuevoCliente = new Cliente(id,nombre,ingresos);
 clientes.push_back(nuevoCliente);
 
 
-cout << "\t==Registro exitoso==\t"<<endl;
-cout << "ID: "<<id<<"Nombre:"<<nombre<<endl;
+cout << "\t===Registro exitoso===\t"<<endl;
+cout << "ID: "<<id<<endl<<"Nombre:"<<nombre<<endl;
+cout<<"==============================================="<<endl;
 }
 void Sistema::crearTarjeta(){
     if(clientes.empty()){
@@ -79,15 +84,251 @@ void Sistema::crearTarjeta(){
     for(int i=0;i<clientes.size();i++){
         cout<<"ID: "<<clientes[i]->getId()<<" Nombre: "<<clientes[i]->getNombre()<<endl;
     }
-    cout<<"ID del cliente: "<<endl;
-    cin >> idCliente;
-    cout<<"Numero de Tarjeta: "<<endl;
-    cin>>numero;
-    
-    if (clientes.size()>0){
-        Cliente* cliente = clientes[0];
-        TarjetaCredito* nuevaTarjeta = new TarjetaCredito(numero,cliente->getNombre(),cliente->getIngresos());    
-        cliente->agregarTarjeta(nuevaTarjeta);
-        cout <<"Tarjeta de Credito creada exitosamente: "<<endl;
+    int opcion;
+    cout << "Seleccione cliente (1-" << clientes.size() << "): ";
+    cin >> opcion;
+if (cin.fail()) {
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cout << "opcion inválida. Use números." << endl;
+    return;
+}
+
+    if (opcion < 1 || opcion > clientes.size()) {
+        cout << "Opción inválida." << endl;
+        return;
     }
+
+    Cliente* cliente = clientes[opcion-1];
+
+    if (opcion < 1 || opcion > clientes.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+
+    cout<<"Numero de Tarjeta: "<<endl;
+    cin.ignore();
+    getline(cin, numero);
+    
+     TarjetaCredito* nuevaTarjeta = new TarjetaCredito(
+        numero, 
+        cliente->getNombre(),
+        cliente->getIngresos()
+    );
+
+    cliente->agregarTarjeta(nuevaTarjeta);
+    
+    cout << "¡Tarjeta creada exitosamente para " 
+     << cliente->getNombre() << "!" << endl;
+}
+
+
+void Sistema::realizarCompra(){
+if(clientes.empty()){
+cout<<"No hay clientes registrados. "<<endl;
+return;
+}
+
+for(int i=0;i<clientes.size();i++){
+cout << i+1 << ". " << clientes[i]->getNombre() << endl;
+}
+
+int opcion;
+cout << "Ingrese el digito que corresponde al cliente: " << endl;
+cin >> opcion;
+if (cin.fail()) {
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cout << "Opcion inválida. Use números." << endl;
+    return;
+}
+  if (opcion < 1 || opcion > clientes.size()) {
+    cout << "Opción inválida" << endl;
+    return;
+}
+ Cliente* cliente = clientes[opcion-1]; 
+if(cliente->getTarjetas().empty()){
+cout <<"El cliente no tiene tarjetas registradas. "<<endl;
+return;
+}
+
+cout << "Tarjetas del usuario: "<< cliente->getNombre()<< endl;
+for(int i=0;i<cliente->getTarjetas().size();i++){
+cout << i+1 << ". " << cliente->getTarjetas()[i]->getNumero() << endl;
+}
+
+int opcionTarjeta;
+cout<<"Ingrese el digito de la tarjeta: "<<endl;
+cin>>opcionTarjeta;
+if (cin.fail()) {
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cout << "Opcion inválida. Use números." << endl;
+    return;
+}
+ if (opcionTarjeta < 1 || opcionTarjeta > cliente->getTarjetas().size()) {
+    cout << "Opción inválida" << endl;
+    return;
+}
+
+TarjetaCredito* tarjeta = cliente->getTarjetas()[opcionTarjeta-1];
+
+double monto;
+string categoria;
+
+cout<< "Ingrese el Monto de la compra $: "<<endl;
+cin>>monto;
+if (cin.fail()) {
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cout << "Monto inválido. Use números." << endl;
+    return;
+}
+cout<<"ingrese la categoria de las siguientes opciones: "<<endl;
+cout<<"ENTRETENIMIENTO/COMIDA/SALUD/EDUCACION"<<endl,
+cin >>categoria;
+bool exito = tarjeta->comprar(monto, categoria);
+
+if(true){
+cout<<"Compra Realizada con exito: "<<endl;
+}else{
+cout<<"La compra no se pudo realizar: "<<endl;
+}
+
+}
+
+void Sistema::realizarPago(){
+
+if(clientes.empty()){
+cout<<"No hay clientes registrados. "<<endl;
+return;
+}
+
+cout << "\n=== CLIENTES ===" << endl;
+for(int i=0;i<clientes.size();i++){
+cout << i+1 << ". " << clientes[i]->getNombre() << endl;
+}
+
+int opcion;
+cout << "Ingrese el digito que corresponde al cliente: " << endl;
+cin >> opcion;
+if (cin.fail()) {
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cout << "opcion inválida. Use números." << endl;
+    return;
+}
+  if (opcion < 1 || opcion > clientes.size()) {
+    cout << "Opción inválida" << endl;
+    return;
+}
+
+Cliente* cliente = clientes[opcion-1];
+
+ if (cliente->getTarjetas().empty()) {
+        cout << "Este cliente no tiene tarjetas." << endl;
+        return;
+    }
+
+  cout << "\n=== TARJETAS DE " << cliente->getNombre() << " ===" << endl;
+    for (int i = 0; i < cliente->getTarjetas().size(); i++) {
+        cout << i+1 << ". " << cliente->getTarjetas()[i]->getNumero()
+             << " (Saldo: $" << cliente->getTarjetas()[i]->getSaldo() << ")" << endl;
+    }
+
+    int opcionTarjeta;
+    cout << "Seleccione tarjeta: ";
+    cin >> opcionTarjeta;
+
+    if (cin.fail()) {
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cout << "Opcion inválida. Use números." << endl;
+    return;
+}
+    if (opcionTarjeta < 1 || opcionTarjeta > cliente->getTarjetas().size()) {
+        cout << "Opción inválida" << endl;
+        return;
+    }
+    
+    TarjetaCredito* tarjeta = cliente->getTarjetas()[opcionTarjeta-1];
+
+    double monto;
+    cout << "Monto a pagar: $";
+    cin >> monto;
+    if (cin.fail()) {
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cout << "Monto inválido. Use números." << endl;
+    return;
+}
+    tarjeta->pagar(monto);
+}
+
+void Sistema::mostrarInformacionCliente(){
+if(clientes.empty()){
+cout<<"No hay clientes registrados. "<<endl;
+return;
+}
+
+cout << "\n=== CLIENTES REGISTRADOS ===" << endl;
+for (int i = 0; i < clientes.size(); i++) {
+    cout << i+1 << ". " << clientes[i]->getNombre() 
+             << " (ID: " << clientes[i]->getId() << ")" << endl;
+}
+
+  int opcion;
+    cout << "Seleccione cliente: ";
+    cin >> opcion;
+    
+if (cin.fail()) {
+    cin.clear();
+    cin.ignore(1000, '\n');
+    cout << "Opcion inválida. Use números." << endl;
+    return;
+}
+
+    if (opcion < 1 || opcion > clientes.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+
+    Cliente* cliente = clientes[opcion-1];
+
+    cout << "\n========================================" << endl;
+    cout << "       INFORMACIÓN COMPLETA DEL CLIENTE" << endl;
+    cout << "========================================" << endl;
+
+cout << "👤 DATOS PERSONALES:" << endl;
+cout << "   Nombre: " << cliente->getNombre() << endl;
+cout << "   ID: " << cliente->getId() << endl;
+cout << "   Ingresos mensuales: $" << cliente->getIngresos() << endl;
+cout << "   Número de tarjetas: " << cliente->getTarjetas().size() << endl;
+
+if (!cliente->getTarjetas().empty()) {
+        double totalSaldo = 0;
+        double totalCupo = 0;
+        double totalDisponible = 0;
+        cout << "\n💳 TARJETAS DE CRÉDITO:" << endl;
+        for (int i = 0; i < cliente->getTarjetas().size(); i++) {
+            TarjetaCredito* tarjeta = cliente->getTarjetas()[i];
+            
+            cout << "\n   Tarjeta #" << i+1 << ":" << endl;
+            cout << "   Número: " << tarjeta->getNumero() << endl;
+            cout << "   Estado: " << tarjeta->getEstado() << endl;
+            cout << "   Cupo máximo: $" << "???" << endl;  // Necesitas getCupoMaximo()
+            cout << "   Saldo actual: $" << tarjeta->getSaldo() << endl;
+            cout << "   Cupo disponible: $" << tarjeta->getCupoDisponible() << endl;
+            cout << "   Pago mínimo: $" << tarjeta->calcularPagoMinimo() << endl;
+            totalSaldo += tarjeta->getSaldo();
+}
+        cout << "\n💰 RESUMEN FINANCIERO:" << endl;
+        cout << "   Saldo total: $" << totalSaldo << endl;
+}
+    cout << "\n========================================" << endl;
+}
+
+void Sistema::cargarClientesDesdeArchivo() {
+    vector<Cliente*> cargados = Archivos::cargarClientes();
+    clientes.insert(clientes.end(), cargados.begin(), cargados.end());
 }

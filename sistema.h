@@ -15,5 +15,10 @@ public:
     void ejecutar();
     void crearCliente();
     void crearTarjeta();
+    void realizarCompra();
+    void realizarPago();
+    void mostrarInformacionCliente();
+    const vector<Cliente*>& getClientes() const { return clientes; }
+    void cargarClientesDesdeArchivo();
 };
 #endif
