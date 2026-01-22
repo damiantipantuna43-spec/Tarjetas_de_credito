@@ -16,9 +16,9 @@ g++ main.cpp tarjetas.cpp clientes.cpp -o sistema.exe && ./sistema.exe
 git add .
 git commit -m "Descripción cambios"
 git push
-para bajar los cambios 
-3. cuando es la primera vez (conectar con repositorio en github)
+3. para bajar los cambios 
 git pull
+4. cuando es la primera vez (conectar con repositorio en github)
 git init
 git add .
 git commit -m "Primer commit"
