@@ -8,7 +8,21 @@
 using namespace std;
 
 void Sistema::ejecutar(){
+
 int opcion;
+int opcionMenu;
+do{
+    cout<<"============================================"<<endl;
+    cout<<"           BIENVENIDO AL SISTEMA            "<<endl;
+    cout<<"         Tarjetas de credito plus           "<<endl;
+    cout<<"============================================"<<endl;
+    cout<<""<<endl;
+    cout<<"1. Modo Cliente"<<endl;
+    cout<<"2. Modo Administrativo"<<endl;
+    cout<<"3. Salir del sistema"<<endl;
+    cin>>opcionMenu;
+switch (opcionMenu){
+case 1:
 do{
     cout << "\t===BIENVENIDO AL SISTEMA DE TARJETAS DE CREDITO===\t"<<endl;
     cout <<"1. Registrarse como cliente "<<endl;
@@ -48,6 +62,21 @@ switch (opcion){
     break;
 }
 }while(opcion !=6);
+break;
+
+
+case 2:
+break;
+
+case 3:
+cout<<"Saliendo del sistema..."<<endl;
+break;
+default:
+cout<<"Opcion invalida. Ingrese de nuevo la opcion del menu.";
+break;
+}
+
+}while(opcionMenu!=3);
 }
 
 void Sistema::crearCliente(){
