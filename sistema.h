@@ -20,5 +20,7 @@ public:
     void mostrarInformacionCliente();
     const vector<Cliente*>& getClientes() const { return clientes; }
     void cargarClientesDesdeArchivo();
+    void bloquearTarjeta();
+    void desbloquearTarjeta();
 };
 #endif

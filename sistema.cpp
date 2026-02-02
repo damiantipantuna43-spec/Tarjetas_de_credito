@@ -11,6 +11,7 @@ void Sistema::ejecutar(){
 
 int opcion;
 int opcionMenu;
+int contrasena=12345;
 do{
     cout<<"============================================"<<endl;
     cout<<"           BIENVENIDO AL SISTEMA            "<<endl;
@@ -63,14 +64,50 @@ switch (opcion){
 }
 }while(opcion !=6);
 break;
-
+case 2:
+//aqui todo xd
+int contrasenausu;
+int opcionadmin;
+cout<<"Bienvenido al sistema administrativo"<<endl;
+cout<<"Ingrese la contraseña para continuar:"<<endl;
+cin>>contrasenausu;
+if(contrasenausu == contrasena){
+do{
+cout<<"===Bienvenido al sistema administrativo==="<<endl;
+cout<<"1. Ver datos de clientes."<<endl;
+cout<<"2. Bloquear Tarjeta."<<endl;
+cout<<"3. Desbloquear Tarjeta."<<endl;
+cout<<"4. Salir"<<endl;
+cin>>opcionadmin;
+switch (opcionadmin){
+case 1:
+mostrarInformacionCliente();
+break;
 
 case 2:
+bloquearTarjeta();
+break;
+
+
+case 3:
+desbloquearTarjeta();
+break;
+
+case 4:
+cout<<"Saliendo..."<<endl;
+break;
+
+
+default:
+cout<<"Opcion Invalida vuelva a intentarlo";
+    break;
+}}while (opcionadmin!=4);}
 break;
 
 case 3:
 cout<<"Saliendo del sistema..."<<endl;
 break;
+
 default:
 cout<<"Opcion invalida. Ingrese de nuevo la opcion del menu.";
 break;
@@ -360,4 +397,17 @@ if (!cliente->getTarjetas().empty()) {
 void Sistema::cargarClientesDesdeArchivo() {
     vector<Cliente*> cargados = Archivos::cargarClientes();
     clientes.insert(clientes.end(), cargados.begin(), cargados.end());
+}
+
+
+void Sistema::bloquearTarjeta(){
+    string estado;
+    estado = "BLOQUEADA";
+    cout << "Tarjeta bloqueada Exitosamente." << endl;
+}
+
+void Sistema::desbloquearTarjeta(){
+    string estado;
+    estado = "ACTIVA";
+    cout << "Tarjeta Activada Exitosamente." << endl;
 }
