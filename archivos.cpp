@@ -11,7 +11,7 @@ void Archivos::guardarClientes(const vector<Cliente*>& clientes) {
         return;
     }
     
-    archivo << "id,nombre,ingresos" << endl;
+    archivo << "Cedula,nombre,ingresos" << endl;
 
     for (Cliente* cliente : clientes) {
         archivo << cliente->getId() << ","

@@ -16,6 +16,7 @@ private:
     std::vector < TarjetaCredito* > tarjetas;
 public:
     Cliente(std::string id, std::string nombre, double ingresosMensuales);
+    ~Cliente();
     void agregarTarjeta(TarjetaCredito* tarjetas);
     void mostrarInfo() const;
     double getIngresos() const;

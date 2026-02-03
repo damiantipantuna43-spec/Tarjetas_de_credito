@@ -12,6 +12,14 @@ nombre = nombreCliente;
 ingresosMensuales = ingresosCliente;
 }
 
+ // Liberar memoria de todas las tarjetas por que sino la pc tose >:V JAJA
+Cliente::~Cliente() {
+   
+    for (TarjetaCredito* tarjeta : tarjetas) {
+        delete tarjeta;
+    }
+    tarjetas.clear();
+}
 void Cliente::agregarTarjeta(TarjetaCredito* misTarjetas){
 tarjetas.push_back(misTarjetas);
 }

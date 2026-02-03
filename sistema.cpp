@@ -8,7 +8,7 @@
 using namespace std;
 
 void Sistema::ejecutar(){
-
+setlocale(LC_ALL, "spanish");
 int opcion;
 int opcionMenu;
 int contrasena=12345;
@@ -77,7 +77,9 @@ cout<<"===Bienvenido al sistema administrativo==="<<endl;
 cout<<"1. Ver datos de clientes."<<endl;
 cout<<"2. Bloquear Tarjeta."<<endl;
 cout<<"3. Desbloquear Tarjeta."<<endl;
-cout<<"4. Salir"<<endl;
+cout<<"4. Eliminar Cliente."<<endl;
+cout<<"5. Eliminar Tarjeta."<<endl;
+cout<<"6. Salir"<<endl;
 cin>>opcionadmin;
 
 switch (opcionadmin){
@@ -95,6 +97,14 @@ desbloquearTarjeta();
 break;
 
 case 4:
+eliminarCliente();
+break;
+
+case 5:
+eliminarTarjeta();
+break;
+
+case 6:
 cout<<"Saliendo..."<<endl;
 break;
 
@@ -102,7 +112,7 @@ break;
 default:
 cout<<"Opcion Invalida vuelva a intentarlo";
     break;
-}}while (opcionadmin!=4);}
+}}while (opcionadmin!=6);}
 break;
 
 case 3:
@@ -122,7 +132,7 @@ string id, nombre;
 double ingresos;
 
 cout <<"\t== Registrarse como Cliente==\t"<<endl;
-cout << "ID del cliente: "<<endl;
+cout << "Cedula del cliente: "<<endl;
 cin >> id;
 
 cout << "Nombre Completo: "<<endl;
@@ -149,7 +159,7 @@ void Sistema::crearTarjeta(){
     cout<< "\t==Crear Tarjeta==\t"<< endl;
     cout<<"Clientes disponibles: "<<endl;
     for(int i=0;i<clientes.size();i++){
-        cout<<"ID: "<<clientes[i]->getId()<<" Nombre: "<<clientes[i]->getNombre()<<endl;
+        cout<<i+1<<". Cedula: "<<clientes[i]->getId()<<" Nombre: "<<clientes[i]->getNombre()<<endl;
     }
     int opcion;
     cout << "Seleccione cliente (1-" << clientes.size() << "): ";
@@ -469,7 +479,7 @@ void Sistema::bloquearTarjeta(){
     
     // Bloquear la tarjeta
     tarjeta->bloquearTarjeta();
-    cout << "✓ Tarjeta " << tarjeta->getNumero() << " ha sido BLOQUEADA exitosamente." << endl;
+    cout << " Tarjeta " << tarjeta->getNumero() << " ha sido BLOQUEADA exitosamente." << endl;
 }
 
 void Sistema::desbloquearTarjeta(){
@@ -533,4 +543,140 @@ void Sistema::desbloquearTarjeta(){
     // Desbloquear la tarjeta
     tarjeta->desbloquearTarjeta();
     cout << "✓ Tarjeta " << tarjeta->getNumero() << " ha sido ACTIVADA exitosamente." << endl;
+}
+
+void Sistema::eliminarTarjeta() {
+    if (clientes.empty()) {
+        cout << "No hay clientes registrados." << endl;
+        return;
+    }
+    
+    // Mostrar clientes
+    cout << "\n=== CLIENTES REGISTRADOS ===" << endl;
+    for (int i = 0; i < clientes.size(); i++) {
+        cout << i+1 << ". " << clientes[i]->getNombre() 
+             << " (ID: " << clientes[i]->getId() << ")" 
+             << " - Tarjetas: " << clientes[i]->getTarjetas().size() << endl;
+    }
+    
+    // Seleccionar cliente
+    int opcionCliente;
+    cout << "\nSeleccione cliente (1-" << clientes.size() << "): ";
+    cin >> opcionCliente;
+    
+    if (opcionCliente < 1 || opcionCliente > clientes.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+    
+    Cliente* cliente = clientes[opcionCliente - 1];
+    vector<TarjetaCredito*>& tarjetas = cliente->getTarjetas();
+    
+    if (tarjetas.empty()) {
+        cout << "Este cliente no tiene tarjetas para eliminar." << endl;
+        return;
+    }
+    
+    // Mostrar tarjetas del cliente
+    cout << "\n=== TARJETAS DE " << cliente->getNombre() << " ===" << endl;
+    for (int i = 0; i < tarjetas.size(); i++) {
+        cout << i+1 << ". " << tarjetas[i]->getNumero()
+             << " - Estado: " << tarjetas[i]->getEstado()
+             << " - Saldo: $" << tarjetas[i]->getSaldo() << endl;
+    }
+    
+    // Seleccionar tarjeta
+    int opcionTarjeta;
+    cout << "\nSeleccione tarjeta a ELIMINAR (1-" << tarjetas.size() << "): ";
+    cin >> opcionTarjeta;
+    
+    if (opcionTarjeta < 1 || opcionTarjeta > tarjetas.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+    
+    TarjetaCredito* tarjetaAEliminar = tarjetas[opcionTarjeta - 1];
+    string numeroTarjeta = tarjetaAEliminar->getNumero();
+    
+    // Confirmar eliminación
+    char confirmar;
+    cout << "\n ADVERTENCIA: Esta acción no se puede deshacer." << endl;
+    cout << "¿Está seguro que desea eliminar la tarjeta " << numeroTarjeta << "? (s/n): ";
+    cin >> confirmar;
+    
+    if (confirmar == 's' || confirmar == 'S') {
+        // Eliminar la tarjeta del vector
+        tarjetas.erase(tarjetas.begin() + (opcionTarjeta - 1));
+        
+        // Liberar la memoria
+        delete tarjetaAEliminar;
+        
+        cout << "✓ Tarjeta " << numeroTarjeta << " eliminada exitosamente." << endl;
+        cout << "El cliente ahora tiene " << tarjetas.size() << " tarjeta(s)." << endl;
+    } else {
+        cout << "Eliminación cancelada." << endl;
+    }
+}
+
+void Sistema::eliminarCliente() {
+    if (clientes.empty()) {
+        cout << "No hay clientes registrados." << endl;
+        return;
+    }
+    
+    // Mostrar clientes
+    cout << "\n=== CLIENTES REGISTRADOS ===" << endl;
+    for (int i = 0; i < clientes.size(); i++) {
+        Cliente* cliente = clientes[i];
+        cout << i+1 << ". " << cliente->getNombre() 
+             << " (ID: " << cliente->getId() << ")" 
+             << " - Tarjetas: " << cliente->getTarjetas().size()
+             << " - Ingresos: $" << cliente->getIngresos() << endl;
+    }
+    
+    // Seleccionar cliente
+    int opcionCliente;
+    cout << "\nSeleccione cliente a ELIMINAR (1-" << clientes.size() << "): ";
+    cin >> opcionCliente;
+    
+    if (opcionCliente < 1 || opcionCliente > clientes.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+    
+    Cliente* clienteAEliminar = clientes[opcionCliente - 1];
+    string nombreCliente = clienteAEliminar->getNombre();
+    int numTarjetas = clienteAEliminar->getTarjetas().size();
+    
+    // Confirmar eliminación
+    cout << "\n   ADVERTENCIA CRÍTICA   " << endl;
+    cout << "Va a eliminar al cliente: " << nombreCliente << endl;
+    cout << "Esta acción también eliminará sus " << numTarjetas << " tarjeta(s)." << endl;
+    cout << "Esta acción NO SE PUEDE DESHACER." << endl;
+    
+    char confirmar;
+    cout << "\n ¿Está ABSOLUTAMENTE seguro? (escriba 'SI' para confirmar): ";
+    string confirmacion;
+    cin >> confirmacion;
+    
+    if (confirmacion == "SI" || confirmacion == "si") {
+        // Primero eliminar todas las tarjetas del cliente
+        vector<TarjetaCredito*>& tarjetas = clienteAEliminar->getTarjetas();
+        for (TarjetaCredito* tarjeta : tarjetas) {
+            delete tarjeta;
+        }
+        tarjetas.clear();
+        
+        // Eliminar el cliente del vector
+        clientes.erase(clientes.begin() + (opcionCliente - 1));
+        
+        // Liberar la memoria del cliente
+        delete clienteAEliminar;
+        
+        cout << "\n Cliente " << nombreCliente << " eliminado exitosamente." << endl;
+        cout << "" << numTarjetas << " tarjeta(s) también fueron eliminadas." << endl;
+        cout << "Quedan " << clientes.size() << " cliente(s) en el sistema." << endl;
+    } else {
+        cout << "Eliminación cancelada." << endl;
+    }
 }
