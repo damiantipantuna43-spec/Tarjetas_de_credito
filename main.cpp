@@ -8,7 +8,7 @@ using namespace std;
 
 int main(){
     setlocale(LC_ALL, "spanish");
-    cout << "=== PRUEBA DEL SISTEMA ===\n" << endl;
+    cout << "=== SISTEMA DE TARJETA DE CREDITO ===\n" << endl;
     Sistema sistema;
     sistema.cargarClientesDesdeArchivo();
     sistema.ejecutar();

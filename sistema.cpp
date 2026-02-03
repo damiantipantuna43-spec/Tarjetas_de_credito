@@ -262,7 +262,7 @@ if (cin.fail()) {
     return;
 }
 cout<<"ingrese la categoria de las siguientes opciones: "<<endl;
-cout<<"ENTRETENIMIENTO/COMIDA/SALUD/EDUCACION"<<endl,
+cout<<"ENTRETENIMIENTO/COMIDA/SALUD/EDUCACION/OTRO"<<endl,
 cin >>categoria;
 bool exito = tarjeta->comprar(monto, categoria);
 
