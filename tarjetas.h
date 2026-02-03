@@ -48,6 +48,7 @@ void desbloquearTarjeta();
 //solo es un calculo matematico del saldo que se va a ir acumulando
 
 double calcularPagoMinimo() const;
-
+void setSaldo(double nuevoSaldo);
+void setEstado(const std::string& nuevoEstado);
 };
 #endif

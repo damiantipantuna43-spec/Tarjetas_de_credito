@@ -13,5 +13,9 @@ int main(){
     sistema.cargarClientesDesdeArchivo();
     sistema.ejecutar();
     Archivos::guardarClientes(sistema.getClientes());
+    Archivos::guardarTarjetas(sistema.getClientes());
+    cout << "\n=== DATOS GUARDADOS EXITOSAMENTE :D ===" << endl;
+    cout << "1. clientes.csv" << endl;
+    cout << "2. tarjetas.csv" << endl;
     return 0;
 }

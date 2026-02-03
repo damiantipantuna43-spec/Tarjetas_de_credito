@@ -79,6 +79,7 @@ cout<<"2. Bloquear Tarjeta."<<endl;
 cout<<"3. Desbloquear Tarjeta."<<endl;
 cout<<"4. Salir"<<endl;
 cin>>opcionadmin;
+
 switch (opcionadmin){
 case 1:
 mostrarInformacionCliente();
@@ -365,9 +366,9 @@ if (cin.fail()) {
     cout << "       INFORMACIÓN COMPLETA DEL CLIENTE" << endl;
     cout << "========================================" << endl;
 
-cout << "👤 DATOS PERSONALES:" << endl;
+cout << "   DATOS PERSONALES:" << endl;
 cout << "   Nombre: " << cliente->getNombre() << endl;
-cout << "   ID: " << cliente->getId() << endl;
+cout << "   Cedula: " << cliente->getId() << endl;
 cout << "   Ingresos mensuales: $" << cliente->getIngresos() << endl;
 cout << "   Número de tarjetas: " << cliente->getTarjetas().size() << endl;
 
@@ -375,21 +376,29 @@ if (!cliente->getTarjetas().empty()) {
         double totalSaldo = 0;
         double totalCupo = 0;
         double totalDisponible = 0;
-        cout << "\n💳 TARJETAS DE CRÉDITO:" << endl;
+        cout << "\n TARJETAS DE CRÉDITO:" << endl;
         for (int i = 0; i < cliente->getTarjetas().size(); i++) {
             TarjetaCredito* tarjeta = cliente->getTarjetas()[i];
             
             cout << "\n   Tarjeta #" << i+1 << ":" << endl;
             cout << "   Número: " << tarjeta->getNumero() << endl;
             cout << "   Estado: " << tarjeta->getEstado() << endl;
-            cout << "   Cupo máximo: $" << "???" << endl;  // Necesitas getCupoMaximo()
+            cout << "   Cupo máximo: $" << tarjeta->getCupoMaximo()<< endl;
             cout << "   Saldo actual: $" << tarjeta->getSaldo() << endl;
             cout << "   Cupo disponible: $" << tarjeta->getCupoDisponible() << endl;
             cout << "   Pago mínimo: $" << tarjeta->calcularPagoMinimo() << endl;
             totalSaldo += tarjeta->getSaldo();
+            totalCupo += tarjeta->getCupoMaximo();
+            totalDisponible += tarjeta->getCupoDisponible();
 }
-        cout << "\n💰 RESUMEN FINANCIERO:" << endl;
+        cout << "\n RESUMEN FINANCIERO:" << endl;
+        cout << "   Cupo total: $" << totalCupo << endl;
         cout << "   Saldo total: $" << totalSaldo << endl;
+        cout << "   Cupo disponible total: $" << totalDisponible << endl;
+        if (totalCupo > 0) {
+            double porcentajeUso = (totalSaldo / totalCupo) * 100;
+            cout << "   Porcentaje de uso: " << porcentajeUso << "%" << endl;
+        }
 }
     cout << "\n========================================" << endl;
 }
@@ -401,13 +410,127 @@ void Sistema::cargarClientesDesdeArchivo() {
 
 
 void Sistema::bloquearTarjeta(){
-    string estado;
-    estado = "BLOQUEADA";
-    cout << "Tarjeta bloqueada Exitosamente." << endl;
+   if (clientes.empty()) {
+        cout << "No hay clientes registrados." << endl;
+        return;
+    }
+
+    // Esto muestra los clientes (del vector el cual se ayuda de archivos csv)
+    cout << "\n=== CLIENTES REGISTRADOS ===" << endl;
+    for (int i = 0; i < clientes.size(); i++) {
+        cout << i+1 << ". " << clientes[i]->getNombre() 
+             << " (ID: " << clientes[i]->getId() << ")" 
+             << " - Tarjetas: " << clientes[i]->getTarjetas().size() << endl;
+    }
+    
+    // Aqui seleccionamos el cliente
+    int opcionCliente;
+    cout << "\nSeleccione cliente (1-" << clientes.size() << "): ";
+    cin >> opcionCliente;
+    
+    if (opcionCliente < 1 || opcionCliente > clientes.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+    
+    Cliente* cliente = clientes[opcionCliente - 1];
+    vector<TarjetaCredito*>& tarjetas = cliente->getTarjetas();
+    
+    if (tarjetas.empty()) {
+        cout << "Este cliente no tiene tarjetas." << endl;
+        return;
+    }
+    
+    // Mostrar tarjetas del cliente
+    cout << "\n=== TARJETAS DE " << cliente->getNombre() << " ===" << endl;
+    for (int i = 0; i < tarjetas.size(); i++) {
+        cout << i+1 << ". " << tarjetas[i]->getNumero()
+             << " - Estado: " << tarjetas[i]->getEstado()
+             << " - Saldo: $" << tarjetas[i]->getSaldo() << endl;
+    }
+    
+    // Seleccionar tarjeta
+    int opcionTarjeta;
+    cout << "\nSeleccione tarjeta a BLOQUEAR (1-" << tarjetas.size() << "): ";
+    cin >> opcionTarjeta;
+    
+    if (opcionTarjeta < 1 || opcionTarjeta > tarjetas.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+    
+    TarjetaCredito* tarjeta = tarjetas[opcionTarjeta - 1];
+    
+    // Verificar si ya está bloqueada
+    if (tarjeta->getEstado() == "BLOQUEADA") {
+        cout << "La tarjeta ya está bloqueada." << endl;
+        return;
+    }
+    
+    // Bloquear la tarjeta
+    tarjeta->bloquearTarjeta();
+    cout << "✓ Tarjeta " << tarjeta->getNumero() << " ha sido BLOQUEADA exitosamente." << endl;
 }
 
 void Sistema::desbloquearTarjeta(){
-    string estado;
-    estado = "ACTIVA";
-    cout << "Tarjeta Activada Exitosamente." << endl;
+    if (clientes.empty()) {
+        cout << "No hay clientes registrados." << endl;
+        return;
+    }
+    
+    // Mostrar clientes
+    cout << "\n=== CLIENTES REGISTRADOS ===" << endl;
+    for (int i = 0; i < clientes.size(); i++) {
+        cout << i+1 << ". " << clientes[i]->getNombre() 
+             << " (ID: " << clientes[i]->getId() << ")" 
+             << " - Tarjetas: " << clientes[i]->getTarjetas().size() << endl;
+    }
+    
+    // Seleccionar cliente
+    int opcionCliente;
+    cout << "\nSeleccione cliente (1-" << clientes.size() << "): ";
+    cin >> opcionCliente;
+    
+    if (opcionCliente < 1 || opcionCliente > clientes.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+    
+    Cliente* cliente = clientes[opcionCliente - 1];
+    vector<TarjetaCredito*>& tarjetas = cliente->getTarjetas();
+    
+    if (tarjetas.empty()) {
+        cout << "Este cliente no tiene tarjetas." << endl;
+        return;
+    }
+    
+    // Mostrar tarjetas del cliente
+    cout << "\n=== TARJETAS DE " << cliente->getNombre() << " ===" << endl;
+    for (int i = 0; i < tarjetas.size(); i++) {
+        cout << i+1 << ". " << tarjetas[i]->getNumero()
+             << " - Estado: " << tarjetas[i]->getEstado()
+             << " - Saldo: $" << tarjetas[i]->getSaldo() << endl;
+    }
+    
+    // Seleccionar tarjeta
+    int opcionTarjeta;
+    cout << "\nSeleccione tarjeta a DESBLOQUEAR (1-" << tarjetas.size() << "): ";
+    cin >> opcionTarjeta;
+    
+    if (opcionTarjeta < 1 || opcionTarjeta > tarjetas.size()) {
+        cout << "Opción inválida." << endl;
+        return;
+    }
+    
+    TarjetaCredito* tarjeta = tarjetas[opcionTarjeta - 1];
+    
+    // Verificar si ya está activa
+    if (tarjeta->getEstado() == "ACTIVA") {
+        cout << "La tarjeta ya está activa." << endl;
+        return;
+    }
+    
+    // Desbloquear la tarjeta
+    tarjeta->desbloquearTarjeta();
+    cout << "✓ Tarjeta " << tarjeta->getNumero() << " ha sido ACTIVADA exitosamente." << endl;
 }

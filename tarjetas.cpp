@@ -115,3 +115,11 @@ void TarjetaCredito::pagar(double monto) {
 double TarjetaCredito::getCupoMaximo() const{
     return cupoMaximo;
 }
+
+void TarjetaCredito::setSaldo(double nuevoSaldo) {
+    saldoActual = nuevoSaldo;
+}
+
+void TarjetaCredito::setEstado(const std::string& nuevoEstado) {
+    estado = nuevoEstado;
+}

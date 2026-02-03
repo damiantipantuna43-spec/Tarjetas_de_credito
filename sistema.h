@@ -22,5 +22,7 @@ public:
     void cargarClientesDesdeArchivo();
     void bloquearTarjeta();
     void desbloquearTarjeta();
+    void eliminarCliente();
+    void eliminarTarjeta();
 };
 #endif
